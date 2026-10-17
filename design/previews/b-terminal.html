@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rohan@amber — portfolio</title>
+<meta name="description" content="Rohan Desai, full-stack and AI engineer. A terminal-session portfolio with animated ascii art.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="module" src="https://ascii.rest/ascii.js"></script>
+<style>
+:root{
+  --bg:#15171a; --pane:#1a1d21; --line:#2b3036; --ink:#d9dee3; --dim:#7f8993; --faint:#444c54;
+  --prompt:#f0b35a; --link:#86d3e8; --ok:#9ccf8a; --sel:rgba(240,179,90,.18);
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+:root.light{
+  --bg:#f3efe6; --pane:#faf7f0; --line:#ddd6c8; --ink:#1f2328; --dim:#6b7078; --faint:#b9b1a2;
+  --prompt:#b3681a; --link:#0d7c99; --ok:#3f7d2c; --sel:rgba(179,104,26,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:14.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible{outline:2px solid var(--prompt);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 14px;background:var(--pane);border-bottom:1px solid var(--line);font-size:13px;color:var(--dim)}
+.bar nav{display:flex;gap:2px;flex-wrap:wrap}
+.bar nav a{color:var(--dim);padding:2px 8px;border-radius:3px}
+.bar nav a.on,.bar nav a:hover{background:var(--sel);color:var(--ink);text-decoration:none}
+.bar .right{display:flex;gap:14px;align-items:center;white-space:nowrap}
+.bar button{font:inherit;color:var(--dim);background:none;border:0;cursor:pointer;padding:2px 6px}
+.bar button:hover{color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 14px 80px}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;min-height:calc(100vh - 60px)}
+.pane{background:var(--pane);border:1px solid var(--line);border-radius:4px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.pane .title{font-size:12px;color:var(--dim);padding:6px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.pane .body{padding:18px 20px;flex:1}
+.scene .body{display:flex;align-items:center;justify-content:center;padding:0;background:#050607}
+.scene ascii-art{display:block;width:100%;font-size:10px;line-height:1.2}
+.scene canvas{width:100%!important;height:auto!important}
+.term .body{white-space:pre-wrap;word-break:break-word}
+.p{color:var(--prompt)}
+.p::before{content:"rohan@amber";color:var(--ok)}
+.p::after{content:" $ ";color:var(--dim)}
+.cmd{color:var(--ink);font-weight:500}
+.out{color:var(--ink);display:block;margin:4px 0 20px}
+.out.dim{color:var(--dim)}
+.cursor{display:inline-block;width:.6em;height:1.1em;background:var(--prompt);vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+h1{font-size:inherit;font-weight:600;margin:0}
+section{margin-top:56px}
+section h2{font-size:inherit;font-weight:500;margin:0 0 10px;color:var(--ink)}
+.block{border-left:2px solid var(--line);padding:4px 0 4px 18px;margin-left:4px}
+.file{margin:0 0 26px}
+.file h3{font-size:inherit;font-weight:600;margin:0 0 4px;color:var(--prompt)}
+.file h3 small{color:var(--dim);font-weight:400;margin-left:10px}
+.file p{margin:0;max-width:78ch;color:var(--ink)}
+.file p+p{margin-top:8px}
+.file b{font-weight:600;color:var(--link)}
+.log{list-style:none;margin:0;padding:0}
+.log li{display:grid;grid-template-columns:7ch 1fr;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.log li:last-child{border:0}
+.log .sha{color:var(--prompt)}
+.log .when{color:var(--dim)}
+.log strong{font-weight:600}
+.log p{margin:2px 0 0;color:var(--dim);max-width:70ch}
+.ls{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px 28px}
+.ls h3{font-size:inherit;font-weight:500;color:var(--dim);margin:0 0 4px}
+.ls ul{list-style:none;margin:0;padding:0}
+.ls li::before{content:"-rw-  ";color:var(--faint)}
+.logos{display:flex;gap:28px;flex-wrap:wrap;align-items:center;margin:18px 0 6px}
+.logos ascii-art{display:block;font-size:6px;line-height:1.1;width:120px}
+.logos canvas{width:120px!important;height:auto!important}
+.contact{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end}
+.contact ascii-art{display:block;font-size:9px;line-height:1.15;color:var(--dim)}
+.contact .big{font-size:clamp(18px,3vw,30px);font-weight:600;line-height:1.2;margin:4px 0 14px}
+.contact .big a{color:var(--ink)}
+.contact .big a:hover{color:var(--prompt);text-decoration:none}
+.footer{margin-top:40px;color:var(--dim);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;min-height:0}
+  .scene .body{min-height:220px}
+  .contact{grid-template-columns:1fr}
+  .contact ascii-art{display:none}
+  .bar .right span.where{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cursor{animation:none}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <nav aria-label="Sections">
+    <a href="#top" class="on">0:whoami</a><a href="#work">1:work</a><a href="#log">2:log</a><a href="#stack">3:stack</a><a href="#contact">4:contact</a>
+  </nav>
+  <div class="right">
+    <span class="where">pune</span>
+    <span id="clock" aria-label="Local time in Pune">--:-- IST</span>
+    <button id="theme" type="button" aria-pressed="false">[light]</button>
+  </div>
+</header>
+
+<div class="wrap" id="top">
+  <div class="hero">
+    <div class="pane scene">
+      <div class="title"><span>scene — black-prism</span><span>ascii.rest</span></div>
+      <div class="body"><ascii-art piece="black-prism"></ascii-art></div>
+    </div>
+    <div class="pane term">
+      <div class="title"><span>rohan@amber: ~</span><span>bash</span></div>
+      <div class="body" id="term"><h1 class="sr" style="position:absolute;left:-9999px">Rohan Desai, full-stack and AI engineer</h1></div>
+    </div>
+  </div>
+
+  <section id="work">
+    <h2><span class="p"></span><span class="cmd">cat work/*.md</span></h2>
+    <div class="block">
+      <div class="file">
+        <h3>prism.md <small>lead memory</small></h3>
+        <p>6.2M+ communications across 177K+ leads (WhatsApp, calls, emails, SMS, notes) turned into a single profile an agent reads in 30 seconds. Kinesis CDC streams Postgres changes into DocumentDB; a map-reduce LLM pipeline with debounced refresh workers keeps profiles current; the CRM reads them over a token-authenticated <b>Node/Hono</b> API.</p>
+        <p>The screens on top, in React: facts, story, risks, suggested next steps, coaching notes, evidence links, and a paginated timeline of every communication.</p>
+      </div>
+      <div class="file">
+        <h3>audits.md <small>an LLM judge that has to show its work</small></h3>
+        <p>Every call and chat transcript is scored against a versioned, hash-locked 17-parameter rubric. The model must quote the transcript as evidence; <b>all arithmetic stays in TypeScript</b>, so it can never invent a grade. Missing data is excluded and its weight redistributed, not scored as failure. Rolled up into per-salesperson report cards with an LLM-written narrative of each person's patterns.</p>
+      </div>
+      <div class="file">
+        <h3>dcm.md <small>lead distribution</small></h3>
+        <p>Routes every incoming lead to the right salesperson: conversion-weighted agent scoring with Bayesian smoothing, rule-based bucket matching, per-agent region filters, round-robin modes, and workers that catch and reassign misrouted or stale leads.</p>
+      </div>
+      <div class="file">
+        <h3>automations.md <small>so sales never needs an engineer</small></h3>
+        <p>An open-source AI workflow builder extended into the CRM's production automation platform (Next.js, React Flow, SQS): event-driven execution, database-driven cron, custom TypeScript code steps, email. Plus self-serve bulk WhatsApp: upload a CSV, preview, send, read per-message delivery reports.</p>
+      </div>
+      <div class="file">
+        <h3>crm.md <small>re-platform, inventory, security</small></h3>
+        <p>Set up the React 19 + Vite + TanStack CRM and rebuilt inventory onboarding, bulk commissions and supply dashboards on it. Migration from a fixed 3-level to a dynamic n-level inventory hierarchy with OpenSearch-backed search. Role-based ACLs, per-user rate limits with Slack alerts, encrypted identifiers on PII endpoints. A Ruby memory-fragmentation fix rolled out to every service.</p>
+      </div>
+      <div class="file">
+        <h3>side/ <small>sonic, image-editor</small></h3>
+        <p><a href="https://github.com/rohancodex/sonic">sonic</a>, a React + Supabase app, and an <a href="https://github.com/rohancodex/image-editor">image editor</a> in Next.js with Framer Motion. A listing-photo pipeline at work that catches blurred uploads (about 1 in 60) and restores them with OpenAI image models.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="log">
+    <h2><span class="p"></span><span class="cmd">git log --reverse career</span></h2>
+    <div class="block">
+      <ol class="log">
+        <li><span class="sha">2018</span><div><strong>B.E. Information Technology, University of Mumbai</strong><p>2018 – 2022. Also where chess became a habit.</p></div></li>
+        <li><span class="sha">2022</span><div><strong>Junior Software Engineer, Torinit Technologies</strong><p>Right at Home Realty: microservices on AWS Lambda and Node, Serverless framework, REST response times cut by up to 50%. Exo: edge deployment on Cloudflare Workers, page loads down to 200–500 ms.</p></div></li>
+        <li><span class="sha">2024</span><div><strong>SDE-2, Amber</strong> <span class="when">May 2024 – HEAD</span><p>Global student-housing marketplace. Owns Prism, the lead-distribution engine and the automation platform end to end.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="stack">
+    <h2><span class="p"></span><span class="cmd">ls -la stack/</span></h2>
+    <div class="block">
+      <div class="ls">
+        <div><h3>languages/</h3><ul><li>typescript</li><li>ruby-on-rails</li><li>node, hono</li><li>react-19, next.js</li><li>tanstack, redux</li></ul></div>
+        <div><h3>ai/</h3><ul><li>map-reduce summarisation</li><li>transcript scoring, evals</li><li>openai image models</li><li>vercel-ai-sdk</li><li>react-flow automations</li></ul></div>
+        <div><h3>data-infra/</h3><ul><li>postgresql, documentdb</li><li>redis, opensearch</li><li>aws kinesis, ecs, lambda, s3</li><li>docker, sidekiq</li><li>cdc, event pipelines</li></ul></div>
+        <div><h3>around/</h3><ul><li>plivo, whatsapp business</li><li>slack, suptask</li><li>datadog, grafana, metabase</li><li>rollbar, logrocket</li></ul></div>
+      </div>
+      <div class="logos">
+        <ascii-art piece="typescript"></ascii-art>
+        <ascii-art piece="ruby"></ascii-art>
+        <ascii-art piece="javascript"></ascii-art>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2><span class="p"></span><span class="cmd">cat contact</span></h2>
+    <div class="block contact">
+      <div>
+        <div class="big"><a href="mailto:rohancodex@gmail.com">rohancodex@gmail.com</a></div>
+        <div><a href="https://github.com/rohancodex">github.com/rohancodex</a></div>
+        <div><a href="https://twitter.com/RohanDesai49">x.com/RohanDesai49</a></div>
+        <div><a href="https://drive.google.com/file/d/1iA-vn3wzWcjDMEpfzA4kLi_UbUiYntDC/view?usp=sharing">resume.pdf</a></div>
+      </div>
+      <ascii-art piece="coffee"></ascii-art>
+    </div>
+  </section>
+
+  <div class="footer"><span>rohan@amber ~ $ exit</span><span>ascii pieces from ascii.rest, MIT</span></div>
+</div>
+
+<script>
+(() => {
+  // theme
+  const root = document.documentElement, btn = document.getElementById('theme');
+  const apply = l => { root.classList.toggle('light', l); btn.textContent = l ? '[dark]' : '[light]'; btn.setAttribute('aria-pressed', l); };
+  let light = false; try { light = localStorage.getItem('rohan-theme') === 'light'; } catch(e){}
+  apply(light);
+  btn.addEventListener('click', () => { light = !light; apply(light); try { localStorage.setItem('rohan-theme', light ? 'light' : 'dark'); } catch(e){} });
+
+  // clock, Pune
+  const clock = document.getElementById('clock');
+  const tick = () => { clock.textContent = new Intl.DateTimeFormat('en-IN', {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:'Asia/Kolkata'}).format(new Date()) + ' IST'; };
+  tick(); setInterval(tick, 15000);
+
+  // active tab
+  const links = [...document.querySelectorAll('.bar nav a')];
+  const targets = links.map(a => document.querySelector(a.getAttribute('href')));
+  const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting){ links.forEach(a => a.classList.remove('on')); links[targets.indexOf(e.target)].classList.add('on'); } }); }, {rootMargin:'-20% 0px -60% 0px'});
+  targets.forEach(t => io.observe(t));
+
+  // the one orchestrated moment: a typed session, once
+  const term = document.getElementById('term');
+  const script = [
+    {cmd:'whoami', out:'Rohan Desai. Full-stack & AI engineer, SDE-2 at Amber, Pune. I build the systems a sales team runs on.'},
+    {cmd:'cat now.txt', out:'Turning 6.2M conversations into profiles an agent reads in 30 seconds, routing every lead to the right person, and automating the rest.'},
+    {cmd:'ls work/', out:'prism/  audits/  dcm/  automations/  crm/  side/', dim:true},
+    {cmd:'open --help', out:'scroll, or use the tabs above. [light] flips the theme.', dim:true},
+  ];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const line = () => { const p = document.createElement('span'); p.className = 'p'; return p; };
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  async function type(el, text, speed){ for (const ch of text){ el.textContent += ch; await sleep(speed + Math.random()*speed); } }
+  async function run(){
+    for (const s of script){
+      const p = line(), c = document.createElement('span'); c.className = 'cmd';
+      term.append(p, c);
+      const cur = document.createElement('span'); cur.className = 'cursor'; term.append(cur);
+      if (reduce) c.textContent = s.cmd; else { await sleep(350); await type(c, s.cmd, 45); await sleep(220); }
+      cur.remove();
+      const o = document.createElement('span'); o.className = 'out' + (s.dim ? ' dim' : ''); o.textContent = s.out; term.append(o);
+      if (!reduce) await sleep(300);
+    }
+    const p = line(); term.append(p); const cur = document.createElement('span'); cur.className = 'cursor'; term.append(cur);
+  }
+  run();
+})();
+</script>
+</body>
+</html>

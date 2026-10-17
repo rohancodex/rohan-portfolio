@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rohan Desai — Rooftop Run</title>
+<meta name="description" content="Full-stack and AI engineer. Portfolio preview inspired by the game Vector.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky-top:#07141f; --sky-mid:#17415a; --sun:#f0a347; --glow:#f8d08a;
+  --far:#2a4659; --mid:#15303f; --near:#050a0f;
+  --ink:#eef3f6; --ink-dim:#a7b7c2; --cyan:#4fd8ea; --amber:#f2a83c;
+  --panel:rgba(5,10,15,.72);
+  --display:"Big Shoulders Display",Impact,sans-serif;
+  --body:"Instrument Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sky-top);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+canvas#city{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.hud{position:fixed;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:18px 24px;pointer-events:none;mix-blend-mode:screen}
+.hud a{pointer-events:auto;color:var(--ink);text-decoration:none;font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.02em}
+.hud .meter{font-variant-numeric:tabular-nums;color:var(--cyan);font-size:14px;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.hud .meter i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+main{position:relative;z-index:2}
+section{min-height:100vh;display:flex;align-items:center;padding:14vh 24px}
+.col{width:min(680px,100%);margin-left:max(24px,calc(50% - 560px))}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(76px,14vw,200px);line-height:.86;margin:0 0 20px;letter-spacing:-.005em;text-transform:uppercase}
+h1 small{display:block;font-size:.26em;font-weight:500;letter-spacing:.06em;color:var(--cyan);margin-bottom:.35em}
+.lede{font-size:clamp(19px,2.1vw,25px);line-height:1.35;max-width:27em;margin:0 0 28px;color:var(--ink);text-shadow:0 1px 3px rgba(5,10,15,.7)}
+.lede em{font-style:normal;color:var(--glow)}
+.links{display:flex;gap:22px;flex-wrap:wrap;text-shadow:0 1px 3px rgba(5,10,15,.7)}
+.links a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--cyan);padding-bottom:2px;font-weight:600}
+.links a:hover,.links a:focus-visible{color:var(--cyan)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+h2{font-family:var(--display);font-weight:900;font-size:clamp(56px,8vw,110px);line-height:.9;margin:0 0 .35em;text-transform:uppercase}
+.panel{background:var(--panel);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:36px clamp(22px,4vw,48px);border-left:4px solid var(--amber)}
+.work{display:grid;gap:30px}
+.work article{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+.work h3{font-family:var(--display);font-weight:700;font-size:34px;margin:0;line-height:1;letter-spacing:.01em}
+.work h3 span{color:var(--ink-dim);font-weight:500;font-size:.62em;margin-left:.5em}
+.work p{margin:0;color:var(--ink-dim);max-width:62ch}
+.work p b{color:var(--ink);font-weight:600}
+.track{list-style:none;margin:0;padding:0;position:relative}
+.track li{position:relative;padding:0 0 30px 38px}
+.track li::before{content:"";position:absolute;left:9px;top:12px;bottom:-8px;width:2px;background:linear-gradient(var(--cyan),transparent)}
+.track li:last-child::before{display:none}
+.track li::after{content:"";position:absolute;left:3px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--near);border:3px solid var(--cyan)}
+.track li.now::after{background:var(--cyan);box-shadow:0 0 16px var(--cyan)}
+.track time{display:block;font-family:var(--display);font-weight:700;font-size:26px;color:var(--amber);letter-spacing:.03em;line-height:1}
+.track strong{display:block;font-size:20px;margin:6px 0 4px}
+.track p{margin:0;color:var(--ink-dim);max-width:60ch}
+.kit{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:22px 28px}
+.kit h3{font-family:var(--display);font-weight:700;font-size:26px;margin:0 0 8px;color:var(--cyan);letter-spacing:.03em}
+.kit ul{list-style:none;margin:0;padding:0;color:var(--ink-dim);line-height:1.7}
+.kit li::before{content:"— ";color:var(--amber)}
+.end .col{text-align:left}
+.end h2{font-size:clamp(70px,12vw,170px)}
+.mail{display:inline-block;font-family:var(--display);font-weight:700;font-size:clamp(26px,4vw,44px);color:var(--near);background:var(--cyan);padding:10px 22px;text-decoration:none;margin:10px 0 24px;letter-spacing:.02em}
+.mail:hover{background:var(--glow)}
+.foot{color:var(--ink-dim);font-size:15px;display:flex;gap:18px;flex-wrap:wrap}
+.foot a{color:var(--ink-dim)}
+.hint{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:3;color:var(--ink-dim);font-size:13px;letter-spacing:.12em;opacity:.9;transition:opacity .4s}
+.hint.gone{opacity:0}
+@media (max-width:700px){
+  section{padding:12vh 18px}
+  .col{margin-left:0}
+  .panel{padding:26px 20px}
+  .hud a{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="city" aria-hidden="true"></canvas>
+<div class="hud">
+  <a href="#top">Rohan Desai</a>
+  <div class="meter"><i></i><span id="dist">0 m</span></div>
+</div>
+
+<main id="top">
+  <section>
+    <div class="col">
+      <h1><small>Full-stack &amp; AI engineer</small>Rohan<br>Desai</h1>
+      <p class="lede">I build the systems a sales team runs on: the memory that turns <em>6 million</em> conversations into something an agent reads in thirty seconds, the engine that routes every lead, and the platform that automates the rest. SDE-2 at Amber, in Pune.</p>
+      <div class="links">
+        <a href="https://github.com/rohancodex">GitHub</a>
+        <a href="https://twitter.com/RohanDesai49">X</a>
+        <a href="mailto:rohancodex@gmail.com">Email</a>
+        <a href="https://drive.google.com/file/d/1iA-vn3wzWcjDMEpfzA4kLi_UbUiYntDC/view?usp=sharing">Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="col panel">
+      <h2>What I build</h2>
+      <div class="work">
+        <article>
+          <h3>Prism <span>lead memory</span></h3>
+          <p><b>6.2M+ communications across 177K+ leads</b>, from WhatsApp, calls, email, SMS and notes, folded into one profile an agent reads in 30 seconds. Kinesis CDC out of Postgres into DocumentDB, a map-reduce LLM pipeline with debounced refresh workers, a token-authenticated Hono API, and the React screens on top: facts, story, risks, next steps, evidence links.</p>
+        </article>
+        <article>
+          <h3>Sales audits <span>an LLM judge that must cite its sources</span></h3>
+          <p>Every call and chat is scored against a versioned, hash-locked 17-parameter rubric, and the model has to quote the transcript as evidence. <b>All the arithmetic stays in TypeScript</b>, so it can never invent a grade. Rolled up into per-salesperson report cards that replaced a team's manual call reviews.</p>
+        </article>
+        <article>
+          <h3>DCM <span>lead distribution</span></h3>
+          <p>The engine behind every incoming lead: conversion-weighted agent scoring with Bayesian smoothing, bucket rules, per-agent region filters, round-robin modes, and <b>workers that catch and reassign stale or misrouted leads</b>.</p>
+        </article>
+        <article>
+          <h3>Automations <span>the platform teams use to skip the engineer</span></h3>
+          <p>An open-source workflow builder extended into the CRM's production automation platform: event triggers, database-driven cron, custom TypeScript steps, email. Plus <b>self-serve bulk WhatsApp</b> with per-message delivery reports, so a campaign send no longer needs a ticket.</p>
+        </article>
+        <article>
+          <h3>And the rest <span>CRM re-platform, image quality, security</span></h3>
+          <p>Set up the new React 19 + Vite + TanStack CRM and rebuilt inventory onboarding, bulk commissions and supply dashboards on it. A pipeline that catches blurred listing photos (about 1 in 60) and restores them with image models. Role-based ACLs, per-user rate limits and encrypted identifiers on PII endpoints.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="run">
+    <div class="col panel">
+      <h2>The run so far</h2>
+      <ol class="track">
+        <li><time>2018 – 2022</time><strong>B.E. Information Technology, University of Mumbai</strong><p>Learned to ship things, and that chess is a reasonable way to lose an afternoon.</p></li>
+        <li><time>2022 – 2024</time><strong>Junior Software Engineer, Torinit</strong><p>Serverless microservices on Lambda for Right at Home Realty, with REST response times cut by up to half. Edge deployment on Cloudflare Workers for Exo, bringing page loads down to 200–500 ms.</p></li>
+        <li class="now"><time>May 2024 – now</time><strong>SDE-2, Amber</strong><p>Global student-housing marketplace. Own Prism, the lead-distribution engine and the automation platform end to end, from ingestion and model pipelines to the product on top.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="kit">
+    <div class="col panel">
+      <h2>Toolkit</h2>
+      <div class="kit">
+        <div><h3>Languages</h3><ul><li>TypeScript</li><li>Ruby on Rails</li><li>Node.js, Hono</li><li>React 19, Next.js</li></ul></div>
+        <div><h3>AI</h3><ul><li>Map-reduce LLM pipelines</li><li>Transcript scoring and evals</li><li>Image-edit models</li><li>Workflow automation</li></ul></div>
+        <div><h3>Data and infra</h3><ul><li>PostgreSQL, DocumentDB</li><li>Redis, OpenSearch</li><li>AWS Kinesis, ECS, Lambda</li><li>Docker, Sidekiq, CDC</li></ul></div>
+        <div><h3>Around it</h3><ul><li>Plivo, WhatsApp APIs</li><li>Slack integrations</li><li>Datadog, Grafana</li><li>Rollbar, LogRocket</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="end" class="end">
+    <div class="col">
+      <h2>End of<br>level</h2>
+      <a class="mail" href="mailto:rohancodex@gmail.com">rohancodex@gmail.com</a>
+      <div class="foot">
+        <a href="https://github.com/rohancodex">github.com/rohancodex</a>
+        <a href="https://twitter.com/RohanDesai49">@RohanDesai49</a>
+        <span>Pune, India</span>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="hint" id="hint">SCROLL TO RUN</div>
+
+<script>
+(() => {
+  const cv = document.getElementById('city'), cx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr;
+  function resize(){ dpr = Math.min(devicePixelRatio||1, 2); W = innerWidth; H = innerHeight; cv.width = W*dpr; cv.height = H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
+  addEventListener('resize', resize); resize();
+
+  // deterministic pseudo-random so the skyline is stable across reloads
+  let seed = 7; const rnd = () => (seed = (seed*16807)%2147483647)/2147483647;
+
+  // three layers of buildings, each a repeating strip of width `period`
+  function makeLayer(period, minW, maxW, minH, maxH, gapChance, gapMin, gapMax){
+    const b = []; let x = 0;
+    while (x < period){
+      if (b.length && rnd() < gapChance){ x += gapMin + rnd()*(gapMax-gapMin); }
+      const w = minW + rnd()*(maxW-minW), h = minH + rnd()*(maxH-minH);
+      const win = []; // lit windows, for mid layer
+      const cols = Math.max(1, Math.floor(w/18)), rows = Math.max(1, Math.floor(h/22));
+      for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) if (rnd() < .18) win.push([c,r]);
+      const props = []; // rooftop silhouettes, for near layer
+      if (rnd()<.6) props.push({t:'tank', x: rnd()*(w-30)});
+      if (rnd()<.5) props.push({t:'ac', x: rnd()*(w-28)});
+      if (rnd()<.35) props.push({t:'ant', x: rnd()*(w-6)});
+      b.push({x, w, h, win, props}); x += w;
+    }
+    return {period: x, b};
+  }
+  const far  = makeLayer(2600, 60, 140, .16, .34, 0, 0, 0);
+  const mid  = makeLayer(2200, 90, 200, .10, .26, .15, 20, 60);
+  const near = makeLayer(1900, 220, 480, .05, .15, .55, 80, 170);
+
+  let scroll = 0, travel = 0, last = performance.now(), hintGone = false;
+  const distEl = document.getElementById('dist'), hint = document.getElementById('hint');
+
+  function roofAt(x){ // near-layer roof height under world x; null if gap
+    const px = ((x % near.period) + near.period) % near.period;
+    for (const bl of near.b) if (px >= bl.x && px < bl.x + bl.w) return bl;
+    return null;
+  }
+
+  function drawLayer(layer, offset, color, yBase, winColor){
+    const start = -((offset % layer.period) + layer.period) % layer.period;
+    cx.fillStyle = color;
+    for (let o = start - layer.period; o < W + layer.period; o += layer.period){
+      for (const bl of layer.b){
+        const x = o + bl.x; if (x + bl.w < 0 || x > W) continue;
+        const h = bl.h * H, y = yBase - h;
+        cx.fillStyle = color; cx.fillRect(x, y, bl.w, h + 4);
+        if (winColor){ cx.fillStyle = winColor; for (const [c,r] of bl.win) cx.fillRect(x + 8 + c*18, y + 10 + r*22, 6, 9); }
+        else { // rooftop props
+          for (const p of bl.props){
+            if (p.t==='tank'){ cx.fillRect(x+p.x+6, y-26, 22, 26); cx.fillRect(x+p.x+2, y-6, 30, 6); }
+            if (p.t==='ac'){ cx.fillRect(x+p.x, y-12, 26, 12); }
+            if (p.t==='ant'){ cx.fillRect(x+p.x, y-44, 3, 44); }
+          }
+        }
+      }
+    }
+  }
+
+  function runner(x, y, t, air){
+    // t: run-cycle phase, air: 0..1 jump progress (null when grounded)
+    cx.save(); cx.translate(x, y); cx.strokeStyle = '#000'; cx.fillStyle = '#000';
+    cx.lineCap = 'round'; cx.lineJoin = 'round';
+    const s = Math.min(1.25, H/620, W/480); cx.scale(s, s);
+    const lean = air != null ? -0.55 : -0.32; cx.rotate(lean*0);
+    // body anchor: hips at (0,-38), shoulders at (10,-78), head centre (16,-94)
+    const hipX = 0, hipY = -40, shX = 11, shY = -80;
+    const sw = Math.sin(t), cw = Math.cos(t);
+    cx.lineWidth = 9;
+    // torso
+    cx.beginPath(); cx.moveTo(hipX, hipY); cx.lineTo(shX, shY); cx.stroke();
+    // head
+    cx.beginPath(); cx.arc(shX+6, shY-14, 10, 0, Math.PI*2); cx.fill();
+    cx.lineWidth = 8;
+    // legs
+    function leg(ph){
+      const a = air != null ? (ph>0 ? .9 : -.6) : Math.sin(ph)*1.0; // thigh angle from vertical, forward positive
+      const kx = hipX + Math.sin(a)*22, ky = hipY + Math.cos(a)*22;
+      const bend = air != null ? 1.3 : Math.max(0, Math.cos(ph))*1.6 + .3;
+      const fx = kx + Math.sin(a - bend)*22, fy = ky + Math.cos(a - bend)*22;
+      cx.beginPath(); cx.moveTo(hipX, hipY); cx.lineTo(kx, ky); cx.lineTo(fx, fy); cx.stroke();
+      cx.beginPath(); cx.moveTo(fx, fy); cx.lineTo(fx+9, fy-1); cx.stroke();
+    }
+    leg(t); leg(t + Math.PI);
+    cx.lineWidth = 7;
+    // arms
+    function arm(ph){
+      const a = air != null ? (ph>0 ? 2.4 : -1.2) : Math.sin(ph)*1.1;
+      const ex = shX + Math.sin(a)*18, ey = shY + Math.cos(a)*18;
+      const hx = ex + Math.sin(a + 1.5)*16, hy = ey + Math.cos(a + 1.5)*16;
+      cx.beginPath(); cx.moveTo(shX, shY); cx.lineTo(ex, ey); cx.lineTo(hx, hy); cx.stroke();
+    }
+    arm(t + Math.PI); arm(t);
+    cx.restore();
+  }
+
+  function frame(now){
+    const dt = Math.min(50, now - last) / 1000; last = now;
+    if (!W || !H){ if (!reduce) requestAnimationFrame(frame); return; }
+    const target = scrollY; scroll += (target - scroll) * .12;
+    const idle = reduce ? 0 : 140 * dt; // the runner never stops
+    travel += idle;
+    const world = travel + scroll * 1.8;
+
+    // sky
+    const g = cx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#07141f'); g.addColorStop(.55, '#17415a'); g.addColorStop(.86, '#c9803a'); g.addColorStop(1, '#f6c56f');
+    cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // sun, low on the horizon
+    const sunX = W*.68 - (world*.015 % (W*1.6)), sunY = H*.80;
+    const sg = cx.createRadialGradient(sunX, sunY, 10, sunX, sunY, H*.5);
+    sg.addColorStop(0, 'rgba(248,208,138,.95)'); sg.addColorStop(.18, 'rgba(240,163,71,.55)'); sg.addColorStop(1, 'rgba(240,163,71,0)');
+    cx.fillStyle = sg; cx.fillRect(0, 0, W, H);
+    cx.fillStyle = '#f8d08a'; cx.beginPath(); cx.arc(sunX, sunY, H*.075, 0, Math.PI*2); cx.fill();
+
+    const base = H;
+    drawLayer(far,  world*.12, '#2a4659', base*.90, null);
+    drawLayer(mid,  world*.35, '#15303f', base*.95, 'rgba(248,208,138,.55)');
+    drawLayer(near, world,     '#050a0f', base + 2, null);
+
+    // runner, fixed on screen at 28% width; sample the roof under him in world coords
+    const rx = W*.28, wx = world + rx;
+    const bl = roofAt(wx);
+    let ry, air = null;
+    if (bl){ ry = base + 2 - bl.h*H; }
+    else {
+      // find gap edges to make a jump arc
+      let l = wx, r = wx; while(!roofAt(l) && wx-l < 400) l -= 4; while(!roofAt(r) && r-wx < 400) r += 4;
+      const lb = roofAt(l), rb = roofAt(r); const y0 = base+2-(lb?lb.h:0.1)*H, y1 = base+2-(rb?rb.h:0.1)*H;
+      const p = (wx - l) / Math.max(1, r - l); air = p;
+      ry = y0 + (y1 - y0)*p - Math.sin(p*Math.PI) * 90;
+    }
+    runner.y = runner.y == null ? ry : runner.y + (ry - runner.y) * (air != null ? .5 : .25);
+    const phase = reduce ? 1.2 : (world / 26);
+    runner(rx, runner.y, phase, air);
+
+    // ground shadow line under near rooftops to sit the figure
+    distEl.textContent = Math.round(world / 10).toLocaleString() + ' m';
+    if (!hintGone && scrollY > 40){ hint.classList.add('gone'); hintGone = true; }
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  if (reduce) addEventListener('scroll', () => requestAnimationFrame(frame), {passive:true});
+})();
+</script>
+</body>
+</html>

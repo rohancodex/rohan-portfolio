@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>og</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..600,50&family=Karla:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Source for og.png (1200×630). Render with headless Chrome, see README. */
+html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+body{background:#f3f1eb;color:#2a2825;font-family:Fraunces,Georgia,serif;position:relative;display:grid;place-items:center}
+.board{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr)}
+.board i{display:block}
+.board i:nth-child(16n+2),.board i:nth-child(16n+4),.board i:nth-child(16n+6),.board i:nth-child(16n+8),
+.board i:nth-child(16n+9),.board i:nth-child(16n+11),.board i:nth-child(16n+13),.board i:nth-child(16n+15){background:rgba(42,40,37,.045)}
+.wrap{position:relative;text-align:center;max-width:980px}
+.mark,.url{font-family:Karla,sans-serif;font-weight:500;font-size:22px;color:#8e8a82;display:block}
+.mark{margin-bottom:22px}
+.url{margin-top:30px}
+h1{font-size:56px;font-weight:400;line-height:1.2;margin:0;font-variation-settings:"opsz" 72,"SOFT" 50;letter-spacing:-.01em}
+.hl{background:linear-gradient(100deg,transparent 2%,var(--c) 4%,var(--c) 96%,transparent 98%) no-repeat 0 78%/100% .55em;padding:0 .08em}
+.knight{position:absolute;top:34px;right:48px;width:120px;height:120px}
+</style></head>
+<body>
+<div class="board"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<svg class="knight" viewBox="0 0 64 64"><path d="M17 56h30l-3-7H21z" fill="#2a2825"/><path d="M23 49c-2-9-4-17 1-26 3-6 9-10 15-9l1-7 5 9c5 2 8 7 7 12l-9-2c-4 2-7 7-6 13l4 10" fill="#f3f1eb" stroke="#2a2825" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="38" cy="22" r="1.6" fill="#2a2825"/></svg>
+<div class="wrap">
+  <span class="mark">A small desk in Pune</span>
+  <h1>Hi, I'm Rohan. I'm a <span class="hl" style="--c:#c5d2ff">full-stack and AI engineer</span> at Amber, where I turn six million conversations into something a salesperson can <span class="hl" style="--c:#ffe27a">read in thirty seconds</span>.</h1>
+  <span class="url">rohan-desai.vercel.app</span>
+</div>
+</body></html>

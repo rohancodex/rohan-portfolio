@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rohan Desai — a small desk in Pune</title>
+<meta name="description" content="Rohan Desai, full-stack and AI engineer at Amber. A quiet, paper-like portfolio with a knight that follows your cursor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,50;1,9..144,400..700,50&family=Karla:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3f1eb; --ink:#2a2825; --pencil:#8e8a82; --line:#d9d5cc; --square:rgba(42,40,37,.045);
+  --butter:#ffe27a; --mint:#b8e6cc; --peri:#c5d2ff; --blush:#ffc6d2;
+  --display:"Fraunces",Georgia,serif; --body:"Karla",system-ui,sans-serif;
+}
+:root.dark{
+  --paper:#1c1b1a; --ink:#ebe7df; --pencil:#8f8a80; --line:#3a3835; --square:rgba(235,231,223,.05);
+  --butter:#b89a2a; --mint:#4c8c6a; --peri:#5a6aa8; --blush:#a85c6e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+:root.dark body::before{mix-blend-mode:screen;opacity:.35}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:4px}
+.hero{position:relative;min-height:100vh;display:grid;place-items:center;padding:24px;overflow:hidden;z-index:1;touch-action:manipulation}
+.board{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);pointer-events:none}
+.board i{display:block}
+.board i:nth-child(16n+2),.board i:nth-child(16n+4),.board i:nth-child(16n+6),.board i:nth-child(16n+8),
+.board i:nth-child(16n+9),.board i:nth-child(16n+11),.board i:nth-child(16n+13),.board i:nth-child(16n+15){background:var(--square)}
+.knight{position:absolute;left:0;top:0;width:64px;height:64px;margin:-32px 0 0 -32px;pointer-events:none;z-index:2;transition:transform .36s cubic-bezier(.3,.9,.4,1.1);will-change:transform}
+.knight svg{width:100%;height:100%;filter:drop-shadow(0 6px 4px rgba(0,0,0,.14))}
+.knight.hop svg{animation:hop .36s ease-out}
+@keyframes hop{0%{transform:translateY(0) scale(1)}45%{transform:translateY(-18px) scale(1.06)}100%{transform:translateY(0) scale(1)}}
+.intro{position:relative;z-index:3;max-width:26ch;text-align:center;font-family:var(--display);font-variation-settings:"opsz" 72,"SOFT" 50;font-weight:400;font-size:clamp(28px,4.4vw,54px);line-height:1.18;letter-spacing:-.01em;margin:0}
+.intro .wrapmark{display:block;font-family:var(--body);font-size:15px;color:var(--pencil);letter-spacing:.02em;margin-bottom:26px;font-weight:500}
+.intro .cue{display:block;font-family:var(--body);font-size:15px;color:var(--pencil);margin-top:30px;font-weight:400}
+.hl{background:linear-gradient(100deg,transparent 2%,var(--c) 4%,var(--c) 96%,transparent 98%);background-size:100% .55em;background-repeat:no-repeat;background-position:0 78%;padding:0 .08em}
+.corner{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:15px;font-weight:500}
+.corner svg{width:58px;height:58px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+.corner:hover svg{transform:rotate(-6deg) translateY(-3px)}
+.corner.tl{top:7vh;left:7vw}.corner.tr{top:7vh;right:7vw}.corner.bl{bottom:9vh;left:7vw}.corner.br{bottom:9vh;right:7vw}
+.corner.bc{bottom:9vh;left:50%;transform:translateX(-50%);background:none;border:0;font:inherit;cursor:pointer;color:var(--ink)}
+.corner.bc svg{width:40px;height:40px}
+.doodle-fill{fill:var(--butter);stroke:none}
+main{position:relative;z-index:1;max-width:62ch;margin:0 auto;padding:40px 24px 120px}
+section{padding:56px 0 8px;scroll-margin-top:20px}
+h2{font-family:var(--display);font-variation-settings:"opsz" 48,"SOFT" 50;font-weight:500;font-size:clamp(30px,4vw,40px);line-height:1.15;margin:0 0 22px;letter-spacing:-.01em}
+h2 svg{width:34px;height:34px;vertical-align:-7px;margin-right:10px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+p{margin:0 0 18px;max-width:60ch}
+.note{color:var(--pencil);font-size:16px}
+.work h3{font-family:var(--display);font-variation-settings:"opsz" 24,"SOFT" 50;font-weight:600;font-size:24px;margin:30px 0 6px;line-height:1.2}
+.work h3 small{font-family:var(--body);font-weight:400;font-size:15px;color:var(--pencil);margin-left:8px}
+.joys{list-style:none;padding:0;margin:0 0 18px}
+.joys li{padding:8px 0;border-bottom:1px dashed var(--line);display:flex;gap:14px;align-items:baseline}
+.joys li::before{content:"♞";color:var(--pencil);font-size:15px}
+.timeline{list-style:none;padding:0;margin:0}
+.timeline li{display:grid;grid-template-columns:9ch 1fr;gap:16px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.timeline li:last-child{border:0}
+.timeline time{color:var(--pencil);font-size:15px;padding-top:3px}
+.timeline strong{font-weight:600}
+.timeline span{display:block;color:var(--pencil);font-size:16px}
+.say a.big{font-family:var(--display);font-variation-settings:"opsz" 48,"SOFT" 50;font-size:clamp(24px,4vw,36px);font-weight:500;text-decoration:none;display:inline-block;margin:6px 0 20px;background:linear-gradient(100deg,transparent 2%,var(--peri) 4%,var(--peri) 96%,transparent 98%) no-repeat 0 85%/100% .4em}
+.say a.big:hover{background-image:linear-gradient(100deg,transparent 2%,var(--butter) 4%,var(--butter) 96%,transparent 98%)}
+.row{display:flex;gap:22px;flex-wrap:wrap}
+.row a{text-decoration:none;border-bottom:1.5px solid var(--line)}
+.row a:hover{border-color:var(--ink)}
+footer{color:var(--pencil);font-size:15px;margin-top:70px;text-align:center}
+@media (max-width:720px){
+  .corner{position:static;transform:none}
+  .corners{position:absolute;left:0;right:0;bottom:4vh;display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;padding:0 10px;z-index:3}
+  .corner svg{width:44px;height:44px}
+  .corner.bc svg{width:36px;height:36px}
+  .hero{padding-bottom:140px}
+  .knight{width:48px;height:48px;margin:-24px 0 0 -24px}
+  .timeline li{grid-template-columns:1fr}
+}
+@media (min-width:721px){.corners{display:contents}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.knight{transition:none}.knight.hop svg{animation:none}}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <div class="board" aria-hidden="true" id="board"></div>
+  <div class="knight" id="knight" aria-hidden="true">
+    <svg viewBox="0 0 64 64">
+      <path d="M17 56h30l-3-7H21z" fill="var(--ink)"/>
+      <path d="M23 49c-2-9-4-17 1-26 3-6 9-10 15-9l1-7 5 9c5 2 8 7 7 12l-9-2c-4 2-7 7-6 13l4 10" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="38" cy="22" r="1.6" fill="var(--ink)"/>
+      <path d="M26 30c2-5 6-9 11-10" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/>
+    </svg>
+  </div>
+
+  <h1 class="intro">
+    <span class="wrapmark">A small desk in Pune</span>
+    Hi, I'm Rohan. I'm a <span class="hl" style="--c:var(--peri)">full-stack and AI engineer</span> at Amber, where I turn six million conversations into something a salesperson can <span class="hl" style="--c:var(--butter)">read in thirty seconds</span>. Off the clock I <span class="hl" style="--c:var(--mint)">play chess</span>, badly and often.
+    <span class="cue" id="cue">Move your cursor. The knight will follow, legally.</span>
+  </h1>
+
+  <div class="corners">
+    <a class="corner tl" href="#work">
+      <svg viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="38" rx="4"/><path d="M8 21h48M14 17h.5M20 17h.5M16 31l6 5-6 5M26 41h10"/></svg>
+      Work
+    </a>
+    <a class="corner tr" href="#now">
+      <svg viewBox="0 0 64 64"><path d="M14 26h30v14a10 10 0 0 1-10 10H24a10 10 0 0 1-10-10z"/><path d="M44 30h4a5 5 0 0 1 0 10h-4M22 20c0-3 3-3 3-6M30 20c0-3 3-3 3-6M12 54h36"/></svg>
+      Now
+    </a>
+    <a class="corner bl" href="#joys">
+      <svg viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="2"/><path d="M21 10v44M32 10v44M43 10v44M10 21h44M10 32h44M10 43h44"/><path class="doodle-fill" d="M10 10h11v11H10zM32 10h11v11H32zM21 21h11v11H21zM43 21h11v11H43zM10 32h11v11H10zM32 32h11v11H32zM21 43h11v11H21zM43 43h11v11H43z"/></svg>
+      Off the clock
+    </a>
+    <a class="corner br" href="#say">
+      <svg viewBox="0 0 64 64"><rect x="8" y="16" width="48" height="34" rx="3"/><path d="M8 20l24 17 24-17M8 50l18-16M56 50L38 34"/></svg>
+      Say hi
+    </a>
+    <button class="corner bc" id="lights" type="button" aria-pressed="false">
+      <svg viewBox="0 0 64 64"><path d="M40 10a22 22 0 1 0 14 38 20 20 0 0 1-14-38z"/><path d="M14 16l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg>
+      <span id="lightsLabel">Lights off</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section id="work" class="work">
+    <h2><svg viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="38" rx="4"/><path d="M8 21h48M16 31l6 5-6 5M26 41h10"/></svg>Work</h2>
+    <p>I've been at Amber, a global student-housing marketplace, since May 2024. Most of what I've built there is the plumbing a sales team stands on.</p>
+
+    <h3>Prism <small>lead memory</small></h3>
+    <p>6.2 million communications across 177 thousand leads, from WhatsApp, calls, emails, SMS and notes, folded into one profile an agent can read in 30 seconds. Postgres changes stream through Kinesis into DocumentDB, a map-reduce LLM pipeline keeps profiles fresh with debounced refresh workers, and the CRM reads them over a Hono API. I built the screens too: facts, story, risks, next steps, and a timeline with evidence links.</p>
+
+    <h3>Sales audits <small>an LLM judge that must quote its sources</small></h3>
+    <p>Every call and chat is scored against a versioned, hash-locked 17-parameter rubric, and the model has to cite the transcript. All the arithmetic stays in TypeScript, so it can't invent a grade; missing data is excluded and its weight redistributed rather than marked as failure. Rolled up into per-salesperson report cards, so managers get continuous feedback instead of spot checks.</p>
+
+    <h3>Lead routing <small>DCM</small></h3>
+    <p>The engine that decides who gets each incoming lead: conversion-weighted scoring with Bayesian smoothing, bucket rules, region filters, round-robin modes, and workers that catch misrouted or stale leads and send them back.</p>
+
+    <h3>Automations <small>and bulk WhatsApp</small></h3>
+    <p>An open-source workflow builder extended into the CRM's production automation platform, with event triggers, database-driven cron, custom TypeScript steps and email. And a self-serve bulk WhatsApp tool: upload a CSV, preview, send, read delivery reports. Sales no longer files a ticket for a campaign.</p>
+
+    <h3>The CRM itself <small>and some side things</small></h3>
+    <p>Set up the new React 19 + Vite + TanStack app and rebuilt inventory onboarding, bulk commissions and supply dashboards on it. Helped move inventory from a fixed three-level to a dynamic n-level hierarchy with OpenSearch search. Locked down PII endpoints with role-based access, rate limits and encrypted identifiers. A pipeline that spots blurred listing photos (about 1 in 60) and restores them with image models. On the side: <a href="https://github.com/rohancodex/sonic">Sonic</a> and an <a href="https://github.com/rohancodex/image-editor">image editor</a>.</p>
+
+    <ol class="timeline">
+      <li><time>2024 – now</time><div><strong>SDE-2, Amber</strong><span>Pune. Prism, lead routing, automations, CRM re-platform.</span></div></li>
+      <li><time>2022 – 2024</time><div><strong>Junior Software Engineer, Torinit</strong><span>Serverless microservices on Lambda for Right at Home Realty; Cloudflare Workers at the edge for Exo, page loads down to 200–500 ms.</span></div></li>
+      <li><time>2018 – 2022</time><div><strong>B.E. Information Technology, University of Mumbai</strong></div></li>
+    </ol>
+  </section>
+
+  <section id="now">
+    <h2><svg viewBox="0 0 64 64"><path d="M14 26h30v14a10 10 0 0 1-10 10H24a10 10 0 0 1-10-10z"/><path d="M44 30h4a5 5 0 0 1 0 10h-4M12 54h36"/></svg>Now</h2>
+    <p>Making Prism's profiles sharper and its audits fairer. Reading more about evaluation than I expected to. Learning that the hardest part of an LLM system is deciding what the model is <em>not</em> allowed to do.</p>
+    <p class="note">Tools I reach for most: TypeScript, Rails, React, Postgres, Redis, OpenSearch, and a lot of AWS Kinesis.</p>
+  </section>
+
+  <section id="joys">
+    <h2><svg viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="2"/><path d="M21 10v44M32 10v44M43 10v44M10 21h44M10 32h44M10 43h44"/></svg>Off the clock</h2>
+    <ul class="joys">
+      <li>Chess, mostly blitz, mostly losing to the same opening trap.</li>
+      <li>Trying new tools before they're a good idea.</li>
+      <li>A lead that got routed right on the first try.</li>
+      <li>The knight on this page. Click a square and it finds the shortest path there.</li>
+    </ul>
+  </section>
+
+  <section id="say" class="say">
+    <h2><svg viewBox="0 0 64 64"><rect x="8" y="16" width="48" height="34" rx="3"/><path d="M8 20l24 17 24-17"/></svg>Say hi</h2>
+    <a class="big" href="mailto:rohancodex@gmail.com">rohancodex@gmail.com</a>
+    <div class="row">
+      <a href="https://github.com/rohancodex">GitHub</a>
+      <a href="https://twitter.com/RohanDesai49">X</a>
+      <a href="https://drive.google.com/file/d/1iA-vn3wzWcjDMEpfzA4kLi_UbUiYntDC/view?usp=sharing">Resume</a>
+    </div>
+  </section>
+
+  <footer id="foot">It's <span id="time">…</span> in Pune.</footer>
+</main>
+
+<script>
+(() => {
+  // lights
+  const root = document.documentElement, lights = document.getElementById('lights'), label = document.getElementById('lightsLabel');
+  const setDark = d => { root.classList.toggle('dark', d); label.textContent = d ? 'Lights on' : 'Lights off'; lights.setAttribute('aria-pressed', d); };
+  let dark = false; try { dark = localStorage.getItem('desk-dark') === '1'; } catch(e){}
+  setDark(dark);
+  lights.addEventListener('click', () => { dark = !dark; setDark(dark); try { localStorage.setItem('desk-dark', dark ? '1' : '0'); } catch(e){} });
+
+  // time in Pune
+  const t = document.getElementById('time');
+  const tick = () => { t.textContent = new Intl.DateTimeFormat('en-IN', {hour:'numeric', minute:'2-digit', timeZone:'Asia/Kolkata'}).format(new Date()).toLowerCase(); };
+  tick(); setInterval(tick, 20000);
+
+  // the knight
+  const hero = document.getElementById('top'), board = document.getElementById('board'), knight = document.getElementById('knight'), cue = document.getElementById('cue');
+  for (let i = 0; i < 64; i++) board.appendChild(document.createElement('i'));
+  if (matchMedia('(hover: none)').matches) cue.textContent = 'Tap a square and the knight finds its way there.';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pos = [5, 1], moving = false, queue = [], lastHop = 0, moved = false; // [col,row], row 0 at top
+  const MOVES = [[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]];
+  const key = ([c,r]) => c*8+r;
+  function place(){
+    const r = hero.getBoundingClientRect(), cw = r.width/8, ch = r.height/8;
+    knight.style.transform = `translate(${(pos[0]+.5)*cw}px, ${(pos[1]+.5)*ch}px)`;
+  }
+  function path(from, to){ // BFS over knight moves
+    if (key(from) === key(to)) return [];
+    const prev = new Map([[key(from), null]]), q = [from];
+    while (q.length){
+      const cur = q.shift();
+      for (const [dc,dr] of MOVES){
+        const n = [cur[0]+dc, cur[1]+dr];
+        if (n[0]<0||n[0]>7||n[1]<0||n[1]>7||prev.has(key(n))) continue;
+        prev.set(key(n), cur); if (key(n) === key(to)){ const out = [n]; let p = cur; while (p && key(p) !== key(from)){ out.unshift(p); p = prev.get(key(p)); } return out; }
+        q.push(n);
+      }
+    }
+    return [];
+  }
+  function hopTo(sq){
+    pos = sq; place();
+    if (!reduce){ knight.classList.remove('hop'); void knight.offsetWidth; knight.classList.add('hop'); }
+    if (!moved){ moved = true; cue.textContent = 'Click a square and it takes the shortest route.'; }
+  }
+  function drain(){
+    if (!queue.length){ moving = false; return; }
+    moving = true; hopTo(queue.shift()); setTimeout(drain, reduce ? 0 : 380);
+  }
+  function squareAt(x, y){
+    const r = hero.getBoundingClientRect();
+    return [Math.min(7, Math.max(0, Math.floor((x - r.left)/r.width*8))), Math.min(7, Math.max(0, Math.floor((y - r.top)/r.height*8)))];
+  }
+  hero.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse' || moving) return;
+    const now = performance.now(); if (now - lastHop < 420) return;
+    const target = squareAt(e.clientX, e.clientY);
+    const p = path(pos, target); if (!p.length) return;
+    lastHop = now; hopTo(p[0]);
+  });
+  hero.addEventListener('click', e => {
+    if (e.target.closest('a,button')) return;
+    const target = squareAt(e.clientX, e.clientY);
+    queue = path(pos, target); if (!moving) drain();
+  });
+  addEventListener('resize', place);
+  place();
+  // let the first paint settle before enabling the transition
+  requestAnimationFrame(() => knight.style.visibility = 'visible');
+})();
+</script>
+</body>
+</html>
